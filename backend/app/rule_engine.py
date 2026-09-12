@@ -47,7 +47,7 @@ def check_compliance(extracted_fields: dict, rules: dict) -> dict:
 
 
 if __name__ == "__main__":
-    from extract import extract_fields
+    from backend.app.extract import extract_fields
 
     sample_text = (
         "MRP Rs. 45.00 (Incl. of all taxes)  Net Qty: 100g  Mfg Date: 05/2026 "
