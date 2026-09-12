@@ -3,49 +3,64 @@
     "MRP": {
       "mandatory": true,
       "pattern": "^Rs\\.?\\s*[\\d]+(\\.[\\d]{1,2})?$",
-      "clause": "LM(PC) Rules 2011, Rule 6(1)(f) — Retail sale price"
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(e) - Retail sale price"
     },
     "Net_Quantity": {
       "mandatory": true,
       "pattern": "^\\d+(\\.\\d+)?\\s*(g|kg|ml|l)$",
-      "clause": "LM(PC) Rules 2011, Rule 6(1)(b) — Net quantity"
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(c) - Net quantity"
     },
     "Mfg_Date": {
       "mandatory": true,
       "pattern": "^\\d{2}/\\d{4}$",
-      "clause": "LM(PC) Rules 2011, Rule 6(1)(e) — Month & year of manufacture"
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(d) - Month & year of manufacture"
     },
     "FSSAI_No": {
       "mandatory": true,
       "pattern": "^\\d{14}$",
-      "clause": "FSS Act — FSSAI license number"
+      "clause": "FSS Act 2006 - FSSAI license number (Rule 6(1)(a) exempts food articles from LM(PC) manufacturer-declaration in favour of FSS Act requirements)"
     },
     "Manufacturer_Name": {
       "mandatory": true,
       "pattern": "^.{5,}$",
-      "clause": "LM(PC) Rules 2011, Rule 6(1)(a) — Manufacturer/packer/importer name & address"
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(a) - Manufacturer/packer/importer name & address"
     },
     "Consumer_Care": {
       "mandatory": true,
       "pattern": "^.{5,}$",
-      "clause": "LM(PC) Rules 2011, Rule 6(1)(g) — Consumer care details"
+      "clause": "LM(PC) Rules 2011, Rule 6(2) - Name, address, phone/e-mail for consumer complaints"
     }
   },
   "Cosmetics": {
     "MRP": {
       "mandatory": true,
       "pattern": "^Rs\\.?\\s*[\\d]+(\\.[\\d]{1,2})?$",
-      "clause": "LM(PC) Rules 2011, Rule 6(1)(f)"
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(e) - Retail sale price"
     },
     "Net_Quantity": {
       "mandatory": true,
       "pattern": "^\\d+(\\.\\d+)?\\s*(g|kg|ml|l)$",
-      "clause": "LM(PC) Rules 2011, Rule 6(1)(b)"
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(c) - Net quantity"
+    },
+    "Mfg_Date": {
+      "mandatory": true,
+      "pattern": "^\\d{2}/\\d{4}$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(d), 4th proviso - Month & year of manufacture (Drugs & Cosmetics Rules 1945 govern cosmetics specifically)"
+    },
+    "Manufacturer_Name": {
+      "mandatory": true,
+      "pattern": "^.{5,}$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(a) - Manufacturer/packer/importer name & address"
+    },
+    "Consumer_Care": {
+      "mandatory": true,
+      "pattern": "^.{5,}$",
+      "clause": "LM(PC) Rules 2011, Rule 6(2) - Name, address, phone/e-mail for consumer complaints"
     },
     "Manufacturing_License": {
       "mandatory": true,
       "pattern": "^[A-Z0-9-]+$",
-      "clause": "Drugs & Cosmetics Rules — Manufacturing license number"
+      "clause": "Drugs & Cosmetics Rules, 1945 - Manufacturing license number (per LM(PC) Rule 6(1)(d), 4th proviso)"
     }
   }
 }

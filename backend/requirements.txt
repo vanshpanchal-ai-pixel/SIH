@@ -8,3 +8,6 @@ paddleocr
 paddlepaddle
 # pytesseract   # alternative/fallback; also needs system package tesseract-ocr
 # pillow
+spacy
+ultralytics
+opencv-python

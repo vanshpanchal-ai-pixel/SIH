@@ -22,6 +22,9 @@ from app.extract import extract_fields
 from app.rule_engine import load_rules, check_compliance
 from app.ocr import run_ocr
 
+from app.categorize import detect_category
+from app.label_detector import detect_and_crop
+
 app = FastAPI(title="SIH26034 Legal Metrology Compliance Checker")
 
 
@@ -39,7 +42,7 @@ def health():
 @app.post("/scan", response_model=dict[str, FieldVerdict])
 async def scan_label(
     file: UploadFile = File(...),
-    category: str = Query("Food", description="Product category, e.g. Food, Cosmetics"),
+    category: str | None = Query(None, description="Product category, e.g. Food, Cosmetics"),
 ):
     # 1. Save uploaded image to a temp path
     suffix = Path(file.filename).suffix or ".jpg"
@@ -48,9 +51,14 @@ async def scan_label(
         tmp_path = tmp.name
 
     try:
+        # Stage 2-3: detect + crop label region (no-op until trained model is added)
+        tmp_path = detect_and_crop(tmp_path)
         # 2. OCR  (Stage 4 of the pipeline — label detection/crop, Stage 3,
         #    is skipped in this Phase-1 scaffold; assumes a pre-cropped PDP photo)
         ocr_text = run_ocr(tmp_path)
+
+        # Auto-detect category via keyword/DistilBERT if not explicitly provided
+        category = category or detect_category(ocr_text)
 
         # 3. Field extraction (Stage 5 — regex primary)
         fields = extract_fields(ocr_text, category)
@@ -70,13 +78,15 @@ async def scan_label(
 
 
 @app.post("/scan-text", response_model=dict[str, FieldVerdict])
-async def scan_text(text: str, category: str = "Food"):
+async def scan_text(text: str, category: str | None = None):
     """
     Debug/dev endpoint: skip OCR entirely, pass raw text straight to
     extraction + rule engine. Useful for the backend teammate to build
     the UI/report layer before OCR is wired up, and for your own testing.
     """
     try:
+        # Auto-detect category if caller didn't specify one
+        category = category or detect_category(text)
         fields = extract_fields(text, category)
         rules = load_rules(category)
         return check_compliance(fields, rules)

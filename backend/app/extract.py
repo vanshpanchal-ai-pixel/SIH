@@ -9,6 +9,34 @@ backup and is intentionally NOT implemented in this Phase-1 scaffold.
 
 import re
 
+# NER fallback (spaCy) for Manufacturer_Name when regex fails on noisy OCR text.
+# Loaded lazily so extract.py still has zero hard dependencies if spaCy isn't
+# installed / model isn't downloaded — falls back to regex-only silently.
+_nlp = None
+
+
+def _get_nlp():
+    global _nlp
+    if _nlp is None:
+        try:
+            import spacy
+            _nlp = spacy.load("en_core_web_sm")
+        except Exception:
+            _nlp = False  # mark as unavailable, don't retry every call
+    return _nlp
+
+
+def _ner_manufacturer_name(text: str):
+    nlp = _get_nlp()
+    if not nlp:
+        return None
+    doc = nlp(text)
+    # Prefer an ORG entity; combine with a following GPE (city) if adjacent.
+    for ent in doc.ents:
+        if ent.label_ == "ORG":
+            return ent.text.strip()
+    return None
+
 # Each extractor returns the *normalized* string that should match the
 # corresponding pattern in rules.json, or None if not found.
 
@@ -47,7 +75,10 @@ _NEXT_FIELD_LOOKAHEAD = r'(?=\s*(?:MRP|Net\s*Qty|Mfg\.?\s*Date|FSSAI|Consumer Ca
 def extract_manufacturer_name(text: str):
     pattern = r'(?:Manufactured|Marketed|Packed)\s*by:?\s*(.+?)' + _NEXT_FIELD_LOOKAHEAD
     m = re.search(pattern, text, re.IGNORECASE)
-    return m.group(1).strip().rstrip(',') if m else None
+    if m:
+        return m.group(1).strip().rstrip(',')
+    # Regex failed (likely noisy OCR) — try NER fallback.
+    return _ner_manufacturer_name(text)
 
 
 def extract_consumer_care(text: str):
@@ -55,6 +86,9 @@ def extract_consumer_care(text: str):
     m = re.search(pattern, text, re.IGNORECASE)
     return m.group(1).strip().rstrip(',') if m else None
 
+def extract_manufacturing_license(text: str):
+    m = re.search(r'(?:Mfg\.?\s*Lic(?:ense)?\.?\s*No\.?)[:\s]*([A-Z0-9-]+)', text, re.IGNORECASE)
+    return m.group(1) if m else None
 
 EXTRACTORS = {
     "MRP": extract_mrp,
@@ -63,6 +97,7 @@ EXTRACTORS = {
     "FSSAI_No": extract_fssai,
     "Manufacturer_Name": extract_manufacturer_name,
     "Consumer_Care": extract_consumer_care,
+    "Manufacturing_License": extract_manufacturing_license,
 }
 
 
