@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+
+# OCR — pick at least one
+paddleocr
+paddlepaddle
+# pytesseract   # alternative/fallback; also needs system package tesseract-ocr
+# pillow

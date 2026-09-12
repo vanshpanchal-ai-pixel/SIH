@@ -1,0 +1,51 @@
+{
+  "Food": {
+    "MRP": {
+      "mandatory": true,
+      "pattern": "^Rs\\.?\\s*[\\d]+(\\.[\\d]{1,2})?$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(f) — Retail sale price"
+    },
+    "Net_Quantity": {
+      "mandatory": true,
+      "pattern": "^\\d+(\\.\\d+)?\\s*(g|kg|ml|l)$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(b) — Net quantity"
+    },
+    "Mfg_Date": {
+      "mandatory": true,
+      "pattern": "^\\d{2}/\\d{4}$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(e) — Month & year of manufacture"
+    },
+    "FSSAI_No": {
+      "mandatory": true,
+      "pattern": "^\\d{14}$",
+      "clause": "FSS Act — FSSAI license number"
+    },
+    "Manufacturer_Name": {
+      "mandatory": true,
+      "pattern": "^.{5,}$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(a) — Manufacturer/packer/importer name & address"
+    },
+    "Consumer_Care": {
+      "mandatory": true,
+      "pattern": "^.{5,}$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(g) — Consumer care details"
+    }
+  },
+  "Cosmetics": {
+    "MRP": {
+      "mandatory": true,
+      "pattern": "^Rs\\.?\\s*[\\d]+(\\.[\\d]{1,2})?$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(f)"
+    },
+    "Net_Quantity": {
+      "mandatory": true,
+      "pattern": "^\\d+(\\.\\d+)?\\s*(g|kg|ml|l)$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(b)"
+    },
+    "Manufacturing_License": {
+      "mandatory": true,
+      "pattern": "^[A-Z0-9-]+$",
+      "clause": "Drugs & Cosmetics Rules — Manufacturing license number"
+    }
+  }
+}
