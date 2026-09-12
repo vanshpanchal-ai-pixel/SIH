@@ -23,7 +23,7 @@ built). `ocr.py` and `main.py` need packages installed (see below).
 ## Setup (on your own machine — this environment has no internet)
 
 ```bash
-cd app
+cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -39,7 +39,7 @@ pip install -r requirements.txt
 ## Run it
 
 ```bash
-uvicorn main:app --reload --port 8000
+uvicorn app.main:app --reload --port 8000
 ```
 
 Test without needing a real label photo yet (debug endpoint, skips OCR):

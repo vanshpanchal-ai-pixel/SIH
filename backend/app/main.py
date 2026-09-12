@@ -18,9 +18,9 @@ from pathlib import Path
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query
 from pydantic import BaseModel
 
-from backend.app.extract import extract_fields
-from backend.app.rule_engine import load_rules, check_compliance
-from backend.app.ocr import run_ocr
+from app.extract import extract_fields
+from app.rule_engine import load_rules, check_compliance
+from app.ocr import run_ocr
 
 app = FastAPI(title="SIH26034 Legal Metrology Compliance Checker")
 
