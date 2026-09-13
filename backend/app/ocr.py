@@ -2,17 +2,8 @@
 OCR wrapper. Tries PaddleOCR first (better multilingual/Indic support per
 Section 8), falls back to Tesseract if PaddleOCR isn't installed/available.
 
-NOTE: Neither engine is installed in the dev sandbox this scaffold was
-generated in (no internet access there). Install locally with:
-
-    pip install paddleocr paddlepaddle
-    # or, for the fallback:
-    pip install pytesseract pillow
-    # + system package: sudo apt-get install tesseract-ocr
-
-This file is written so main.py can import `run_ocr` right now — it will
-raise a clear RuntimeError telling you what to install if neither engine
-is available, rather than failing silently.
+NOTE: PaddleOCR is temporarily disabled (see run_ocr) due to a
+paddlepaddle/paddlex version-compatibility issue on Windows.
 """
 
 from typing import Optional
@@ -33,7 +24,7 @@ def _run_paddle(image_path: str) -> Optional[str]:
         engine = _get_paddle_engine()
     except ImportError:
         return None
-    result = engine.ocr(image_path, cls=True)
+    result = engine.ocr(image_path)
     lines = []
     for page in result:
         for line in page:
@@ -42,19 +33,19 @@ def _run_paddle(image_path: str) -> Optional[str]:
 
 
 def _run_tesseract(image_path: str) -> Optional[str]:
-    try:
-        import pytesseract
-        from PIL import Image
-    except ImportError:
-        return None
+    import pytesseract
+    from PIL import Image
+    pytesseract.pytesseract.tesseract_cmd = r"D:\SIH\downloads\tesseract.exe"
     return pytesseract.image_to_string(Image.open(image_path))
 
 
 def run_ocr(image_path: str) -> str:
-    """Run OCR on an image, PaddleOCR first, Tesseract fallback."""
-    text = _run_paddle(image_path)
-    if text:
-        return text
+    """Run OCR on an image. Tesseract-only for now — PaddleOCR disabled
+    due to a paddlepaddle/paddlex version-compatibility issue on Windows
+    (tracked separately; re-enable by uncommenting the _run_paddle call)."""
+    # text = _run_paddle(image_path)   # disabled — see note above
+    # if text:
+    #     return text
 
     text = _run_tesseract(image_path)
     if text:

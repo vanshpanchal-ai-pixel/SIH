@@ -6,7 +6,7 @@ pydantic
 # OCR — pick at least one
 paddleocr
 paddlepaddle
-# pytesseract   # alternative/fallback; also needs system package tesseract-ocr
+pytesseract   # alternative/fallback; also needs system package tesseract-ocr
 # pillow
 spacy
 ultralytics

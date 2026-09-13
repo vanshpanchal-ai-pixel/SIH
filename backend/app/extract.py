@@ -63,6 +63,9 @@ def extract_mfg_date(text: str):
 
 def extract_fssai(text: str):
     m = re.search(r'FSSAI\D{0,10}?(\d{14})', text, re.IGNORECASE)
+    if m:
+        return m.group(1)
+    m = re.search(r'(?:Mkt\.?|Mfg\.?)\s*Lic\.?\s*No\.?\D{0,5}?(\d{14})', text, re.IGNORECASE)
     return m.group(1) if m else None
 
 
@@ -73,18 +76,26 @@ _NEXT_FIELD_LOOKAHEAD = r'(?=\s*(?:MRP|Net\s*Qty|Mfg\.?\s*Date|FSSAI|Consumer Ca
 
 
 def extract_manufacturer_name(text: str):
-    pattern = r'(?:Manufactured|Marketed|Packed)\s*by:?\s*(.+?)' + _NEXT_FIELD_LOOKAHEAD
+    pattern = (
+        r'(?:Manufactured|Mfg\.?\s*(?:&|and)?\s*Mkt\.?|Marketed(?:\s*(?:&|and)\s*Distributed)?|Packed)'
+        r'\s*by:?\s*(.+?)' + _NEXT_FIELD_LOOKAHEAD
+    )
     m = re.search(pattern, text, re.IGNORECASE)
     if m:
         return m.group(1).strip().rstrip(',')
-    # Regex failed (likely noisy OCR) — try NER fallback.
     return _ner_manufacturer_name(text)
 
 
 def extract_consumer_care(text: str):
     pattern = r'(?:Consumer Care|Customer Care)[:\s]*(.+?)' + _NEXT_FIELD_LOOKAHEAD
     m = re.search(pattern, text, re.IGNORECASE)
-    return m.group(1).strip().rstrip(',') if m else None
+    if m:
+        return m.group(1).strip().rstrip(',')
+    m = re.search(r'\b(1800[\s-]?\d{2,3}[\s-]?\d{4})\b', text)
+    if m:
+        return m.group(1)
+    m = re.search(r'\b[\w.+-]+@[\w-]+\.[\w.-]+\b', text)
+    return m.group(0) if m else None
 
 def extract_manufacturing_license(text: str):
     m = re.search(r'(?:Mfg\.?\s*Lic(?:ense)?\.?\s*No\.?)[:\s]*([A-Z0-9-]+)', text, re.IGNORECASE)
