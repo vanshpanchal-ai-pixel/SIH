@@ -14,6 +14,15 @@ import re
 # installed / model isn't downloaded — falls back to regex-only silently.
 _nlp = None
 
+def extract_generic_name(text: str):
+    # Rule 6(1)(b) — common/generic name of commodity. No fixed keyword
+    # marks this field on real labels, so we match the common phrasing
+    # "PROPRIETARY FOOD - <NAME>" seen on many Indian snack labels, and
+    # fall back to None (this extractor has known limited coverage).
+    m = re.search(r'PROPRIETARY FOOD\s*-\s*([A-Z][A-Z\s]+?)(?:\(|\.|,|$)', text, re.IGNORECASE)
+    if m:
+        return m.group(1).strip()
+    return None
 
 def _get_nlp():
     global _nlp
@@ -107,7 +116,7 @@ EXTRACTORS = {
     "FSSAI_No": extract_fssai,
     "Manufacturer_Name": extract_manufacturer_name,
     "Consumer_Care": extract_consumer_care,
-    "Manufacturing_License": extract_manufacturing_license,
+    "Generic_Name": extract_generic_name,
 }
 
 

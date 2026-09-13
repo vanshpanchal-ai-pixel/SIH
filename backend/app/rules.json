@@ -1,5 +1,10 @@
 {
   "Food": {
+    "Generic_Name": {
+      "mandatory": true,
+      "pattern": "^.{2,}$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(b) - Common/generic name of commodity"
+    },
     "MRP": {
       "mandatory": true,
       "pattern": "^Rs\\.?\\s*[\\d]+(\\.[\\d]{1,2})?$",
@@ -32,6 +37,11 @@
     }
   },
   "Cosmetics": {
+    "Generic_Name": {
+      "mandatory": true,
+      "pattern": "^.{2,}$",
+      "clause": "LM(PC) Rules 2011, Rule 6(1)(b) - Common/generic name of commodity"
+    },
     "MRP": {
       "mandatory": true,
       "pattern": "^Rs\\.?\\s*[\\d]+(\\.[\\d]{1,2})?$",
