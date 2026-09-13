@@ -39,13 +39,29 @@ def _run_tesseract(image_path: str) -> Optional[str]:
     return pytesseract.image_to_string(Image.open(image_path))
 
 
+# def run_ocr(image_path: str) -> str:
+#     """Run OCR on an image. Tesseract-only for now — PaddleOCR disabled
+#     due to a paddlepaddle/paddlex version-compatibility issue on Windows
+#     (tracked separately; re-enable by uncommenting the _run_paddle call)."""
+#     # text = _run_paddle(image_path)   # disabled — see note above
+#     # if text:
+#     #     return text
+
+#     text = _run_tesseract(image_path)
+#     if text:
+#         return text
+
+#     raise RuntimeError(
+#         "No OCR engine available. Install one of:\n"
+#         "  pip install paddleocr paddlepaddle\n"
+#         "  pip install pytesseract pillow  (+ apt-get install tesseract-ocr)"
+#     )
+
 def run_ocr(image_path: str) -> str:
-    """Run OCR on an image. Tesseract-only for now — PaddleOCR disabled
-    due to a paddlepaddle/paddlex version-compatibility issue on Windows
-    (tracked separately; re-enable by uncommenting the _run_paddle call)."""
-    # text = _run_paddle(image_path)   # disabled — see note above
-    # if text:
-    #     return text
+    """Run OCR on an image, PaddleOCR first, Tesseract fallback."""
+    text = _run_paddle(image_path)
+    if text:
+        return text
 
     text = _run_tesseract(image_path)
     if text:

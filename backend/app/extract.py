@@ -65,9 +65,8 @@ def extract_fssai(text: str):
     m = re.search(r'FSSAI\D{0,10}?(\d{14})', text, re.IGNORECASE)
     if m:
         return m.group(1)
-    m = re.search(r'(?:Mkt\.?|Mfg\.?)\s*Lic\.?\s*No\.?\D{0,5}?(\d{14})', text, re.IGNORECASE)
+    m = re.search(r'Lic\.?\s*No\.?\D{0,5}?(\d{14})', text, re.IGNORECASE)
     return m.group(1) if m else None
-
 
 # Labels that mark the start of the *next* field on a crowded label — used as
 # lookahead stop-points so one field's regex doesn't swallow the next field's
